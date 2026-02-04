@@ -69,6 +69,16 @@
             </ul>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderDetailsPageOverview, additionalData = Model })
         </div>
+        @if (Model.CustomGiftCard != null)
+        {
+            <div class="custom-gift-card-details">
+                <p class="topic"><strong>Custom Gift Card</strong></p>
+
+                <p>Recipient: @Model.CustomGiftCard.RecipientName</p>
+                <p>Message: @Model.CustomGiftCard.Message</p>
+                <p>Style: @Model.CustomGiftCard.Style</p>
+            </div>
+        }
         <div class="order-details-area">
             <div class="billing-info-wrap">
                 <div class="billing-info">

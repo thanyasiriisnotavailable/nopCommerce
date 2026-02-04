@@ -68,27 +68,27 @@ public class CustomGiftCardServiceTests : ServiceTest
     }
 
     [Test]
-    public async Task ItShouldReturnEmptyListWhenOrderIdIsInvalid()
+    public async Task ItShouldReturnNullWhenOrderIdIsInvalid()
     {
         var result = await _customGiftCardService.GetByOrderIdAsync(0);
 
-        result.Should().NotBeNull();
-        result.Should().BeEmpty();
+        result.Should().BeNull();
     }
 
+
     [Test]
-    public async Task ItShouldReturnEmptyListWhenNoGiftCardsForOrder()
+    public async Task ItShouldReturnNullWhenNoGiftCardForOrder()
     {
-        var (customer, order) = await CreateCustomerAndOrderAsync();
+        var (_, order) = await CreateCustomerAndOrderAsync();
 
         var result = await _customGiftCardService.GetByOrderIdAsync(order.Id);
 
-        result.Should().NotBeNull();
-        result.Should().BeEmpty();
+        result.Should().BeNull();
     }
 
+
     [Test]
-    public async Task ItShouldReturnGiftCardsByOrderId()
+    public async Task ItShouldReturnGiftCardByOrderId()
     {
         var (customer, order) = await CreateCustomerAndOrderAsync();
 
@@ -101,19 +101,11 @@ public class CustomGiftCardServiceTests : ServiceTest
             Style = "modern"
         });
 
-        await _customGiftCardService.InsertAsync(new CustomGiftCard
-        {
-            OrderId = order.Id,
-            CustomerId = customer.Id,
-            RecipientName = "Bob",
-            Message = "Enjoy",
-            Style = "classic"
-        });
-
         var result = await _customGiftCardService.GetByOrderIdAsync(order.Id);
 
-        result.Should().HaveCount(2);
-        result.Select(x => x.RecipientName)
-              .Should().BeEquivalentTo("Alice", "Bob");
+        result.Should().NotBeNull();
+        result!.RecipientName.Should().Be("Alice");
+        result.Message.Should().Be("Congrats");
+        result.Style.Should().Be("modern");
     }
 }

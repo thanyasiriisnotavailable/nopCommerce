@@ -65,6 +65,7 @@ public partial class OrderModelFactory : IOrderModelFactory
     protected readonly IStoreContext _storeContext;
     protected readonly IUrlRecordService _urlRecordService;
     protected readonly IVendorService _vendorService;
+    private readonly ICustomGiftCardService _customGiftCardService;
     protected readonly IWebHelper _webHelper;
     protected readonly IWorkContext _workContext;
     protected readonly MediaSettings _mediaSettings;
@@ -105,6 +106,7 @@ public partial class OrderModelFactory : IOrderModelFactory
         IStoreContext storeContext,
         IUrlRecordService urlRecordService,
         IVendorService vendorService,
+        ICustomGiftCardService customGiftCardService,
         IWebHelper webHelper,
         IWorkContext workContext,
         MediaSettings mediaSettings,
@@ -141,6 +143,7 @@ public partial class OrderModelFactory : IOrderModelFactory
         _storeContext = storeContext;
         _urlRecordService = urlRecordService;
         _vendorService = vendorService;
+        _customGiftCardService = customGiftCardService;
         _webHelper = webHelper;
         _workContext = workContext;
         _mediaSettings = mediaSettings;
@@ -383,6 +386,19 @@ public partial class OrderModelFactory : IOrderModelFactory
         }
 
         var billingAddress = await _addressService.GetAddressByIdAsync(order.BillingAddressId);
+
+        //custom gift card details
+        var customGiftCard = await _customGiftCardService.GetByOrderIdAsync(order.Id);
+
+        if (customGiftCard != null)
+        {
+            model.CustomGiftCard = new CustomGiftCardModel
+            {
+                RecipientName = customGiftCard.RecipientName,
+                Message = customGiftCard.Message,
+                Style = customGiftCard.Style
+            };
+        }
 
         //billing info
         await _addressModelFactory.PrepareAddressModelAsync(model.BillingAddress,

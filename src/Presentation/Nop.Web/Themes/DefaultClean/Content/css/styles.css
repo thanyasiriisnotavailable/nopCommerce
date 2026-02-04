@@ -5501,6 +5501,7 @@ label, label + * {
   background-color: #f00000;
 }
 
+.custom-gift-card-details,
 .order-details-page .order-overview {
   margin: 0 0 50px;
   line-height: 26px;
@@ -5509,6 +5510,7 @@ label, label + * {
   color: var(--dark-gray-color);
 }
 
+.custom-gift-card-details .topic,
 .order-details-page .order-overview .order-number {
   margin: 0 0 10px;
   text-transform: uppercase;

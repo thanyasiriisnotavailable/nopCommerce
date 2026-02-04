@@ -4,6 +4,6 @@ namespace Nop.Services.Orders;
 public interface ICustomGiftCardService
 {
     Task InsertAsync(CustomGiftCard giftCard);
-    Task<IList<CustomGiftCard>> GetByOrderIdAsync(int orderId);
+    Task<CustomGiftCard?> GetByOrderIdAsync(int orderId);
 }
 

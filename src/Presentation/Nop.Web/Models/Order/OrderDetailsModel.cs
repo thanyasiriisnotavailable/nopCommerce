@@ -79,6 +79,7 @@ public partial record OrderDetailsModel : BaseNopEntityModel
     public string RedeemedRewardPointsAmount { get; set; }
     public string OrderTotal { get; set; }
     public decimal OrderTotalValue { get; set; }
+    public CustomGiftCardModel? CustomGiftCard { get; set; }
 
     public IList<GiftCard> GiftCards { get; set; }
 
