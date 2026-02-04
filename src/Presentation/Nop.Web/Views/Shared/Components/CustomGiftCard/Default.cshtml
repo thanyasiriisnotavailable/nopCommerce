@@ -1,0 +1,38 @@
+﻿@model CustomGiftCardModel
+
+<div class="gift-card-box">
+    <h1>Gift Card</h1>
+
+    <input asp-for="RecipientName" id="GiftCardRecipient" placeholder="Recipient name" />
+    <textarea asp-for="Message" id="GiftCardMessage" placeholder="Message"></textarea>
+
+    <select asp-for="Style" id="GiftCardStyle">
+        <option value="">Select style</option>
+        <option value="birthday">Birthday</option>
+        <option value="classic">Classic</option>
+        <option value="modern">Modern</option>
+    </select>
+</div>
+
+<script>
+    (function () {
+
+        function saveGiftCard() {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@Url.RouteUrl("SaveCustomGiftCard")",
+                data: {
+                    RecipientName: $('#GiftCardRecipient').val(),
+                    Message: $('#GiftCardMessage').val(),
+                    Style: $('#GiftCardStyle').val()
+                }
+            });
+        }
+
+        $('#GiftCardRecipient').on('blur', saveGiftCard);
+        $('#GiftCardMessage').on('blur', saveGiftCard);
+        $('#GiftCardStyle').on('change', saveGiftCard);
+
+    })();
+</script>

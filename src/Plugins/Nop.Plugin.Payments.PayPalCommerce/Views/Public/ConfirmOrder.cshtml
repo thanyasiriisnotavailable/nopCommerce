@@ -103,6 +103,9 @@
             </form>
         </div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutConfirmBottom, additionalData = Model })
+        <div class="section custom-giftcard">
+            @await Component.InvokeAsync(typeof(CustomGiftCardViewComponent))
+        </div>
         <div class="section order-summary">
             @await Component.InvokeAsync(typeof(OrderSummaryViewComponent), new { prepareAndDisplayOrderReviewData = true })
         </div>

@@ -25,6 +25,7 @@ using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Models.Checkout;
 using Nop.Web.Models.Common;
+using Nop.Web.Models.Order;
 using ILogger = Nop.Services.Logging.ILogger;
 
 namespace Nop.Web.Controllers;
@@ -53,6 +54,7 @@ public partial class CheckoutController : BasePublicController
     protected readonly IProductService _productService;
     protected readonly IShippingService _shippingService;
     protected readonly IShoppingCartService _shoppingCartService;
+    protected readonly ICustomGiftCardService _customGiftCardService;
     protected readonly IStoreContext _storeContext;
     protected readonly ITaxService _taxService;
     protected readonly IWebHelper _webHelper;
@@ -87,6 +89,7 @@ public partial class CheckoutController : BasePublicController
         IProductService productService,
         IShippingService shippingService,
         IShoppingCartService shoppingCartService,
+        ICustomGiftCardService customGiftCardService,
         IStoreContext storeContext,
         ITaxService taxService,
         IWebHelper webHelper,
@@ -116,6 +119,7 @@ public partial class CheckoutController : BasePublicController
         _productService = productService;
         _shippingService = shippingService;
         _shoppingCartService = shoppingCartService;
+        _customGiftCardService = customGiftCardService;
         _storeContext = storeContext;
         _taxService = taxService;
         _webHelper = webHelper;
@@ -409,6 +413,8 @@ public partial class CheckoutController : BasePublicController
         {
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
         }
+
+        await SaveCustomGiftCardAfterOrderAsync(order, customer);
 
         //disable "order completed" page?
         if (_orderSettings.DisableOrderCompletedPage)
@@ -2166,6 +2172,41 @@ public partial class CheckoutController : BasePublicController
             await _logger.WarningAsync(exc.Message, exc, await _workContext.GetCurrentCustomerAsync());
             return Content(exc.Message);
         }
+    }
+
+    private async Task SaveCustomGiftCardAfterOrderAsync(Order order, Customer customer)
+    {
+        var recipient = await _genericAttributeService
+            .GetAttributeAsync<string>(customer, "CustomGiftCard.RecipientName");
+        var message = await _genericAttributeService
+            .GetAttributeAsync<string>(customer, "CustomGiftCard.Message");
+        var style = await _genericAttributeService
+            .GetAttributeAsync<string>(customer, "CustomGiftCard.Style");
+
+        if (string.IsNullOrEmpty(recipient) && string.IsNullOrEmpty(message))
+            return;
+
+        var giftCard = new CustomGiftCard
+        {
+            OrderId = order.Id,
+            CustomerId = customer.Id,
+            RecipientName = recipient,
+            Message = message,
+            Style = style,
+            CreatedOnUtc = DateTime.UtcNow
+        };
+
+        await _customGiftCardService.InsertAsync(giftCard);
+
+        // cleanup temp data
+        await _genericAttributeService.SaveAttributeAsync<string>(
+            customer, "CustomGiftCard.RecipientName", null);
+
+        await _genericAttributeService.SaveAttributeAsync<string>(
+            customer, "CustomGiftCard.Message", null);
+
+        await _genericAttributeService.SaveAttributeAsync<string>(
+            customer, "CustomGiftCard.Style", null);
     }
 
     #endregion

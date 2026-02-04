@@ -107,6 +107,12 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}/customer/recurringpayments",
             defaults: new { controller = "Order", action = "CustomerRecurringPayments" });
 
+        endpointRouteBuilder.MapControllerRoute(
+            name: "SaveCustomGiftCard",
+            pattern: "customgiftcard/save",
+            defaults: new { controller = "CustomGiftCard", action = "Save" }
+        );
+
         //contact us
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.CONTACT_US,
             pattern: $"{lang}/contactus",
