@@ -9299,3 +9299,56 @@ a.skip:hover {
   width: 100%;
   font-size: 16px;
 }
+
+
+/*** CUSTOM GIFT CARD ***/
+.gift-card-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+#GiftCardRecipient {
+  width: 50%;
+  margin-right: 20px;
+}
+
+#GiftCardStyle {
+  width: 10%;
+  height: 36px;
+}
+
+.gift-card-box textarea {
+  width: 100%;
+  min-height: 100px;
+  margin: 0;
+}
+
+.oneline-input-box {
+  margin: 20px 0 20px 0;
+}
+
+@media (max-width: 992px) {
+  h1.topic {
+    text-align: left;
+    width: 100%;
+  }
+
+  .oneline-input-box {
+    width: 100%;
+    flex-direction: column; /* stack vertically */
+    align-items: flex-start; /* left side */
+    margin-bottom: 0;
+  }
+
+  #GiftCardRecipient,
+  #GiftCardStyle {
+    width: 100%; /* full width */
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .gift-card-box textarea {
+    margin-top: 0;
+  }
+}

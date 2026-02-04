@@ -1,17 +1,18 @@
 ﻿@model CustomGiftCardModel
 
 <div class="gift-card-box">
-    <h1>Gift Card</h1>
+    <h1 class="topic">Gift Card</h1>
 
-    <input asp-for="RecipientName" id="GiftCardRecipient" placeholder="Recipient name" />
+    <div class="oneline-input-box">
+        <input asp-for="RecipientName" id="GiftCardRecipient" placeholder="Recipient name" />
+        <select asp-for="Style" id="GiftCardStyle">
+            <option value="">Select style</option>
+            <option value="birthday">Birthday</option>
+            <option value="classic">Classic</option>
+            <option value="modern">Modern</option>
+        </select>
+    </div>
     <textarea asp-for="Message" id="GiftCardMessage" placeholder="Message"></textarea>
-
-    <select asp-for="Style" id="GiftCardStyle">
-        <option value="">Select style</option>
-        <option value="birthday">Birthday</option>
-        <option value="classic">Classic</option>
-        <option value="modern">Modern</option>
-    </select>
 </div>
 
 <script>
